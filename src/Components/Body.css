@@ -1,0 +1,53 @@
+/* Body Componenet */
+.bodyContainer {
+    display: flex;
+    flex-direction: column;
+    height: 80vh;
+    background-color: #122932;
+    border-radius: 10px;
+    padding-top: 2px;
+}
+
+/* Array Box Component */
+.arrayBoxContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-self: center;
+    height: 80%;
+    width: 80%;
+}
+
+/* Array Bar Component */
+.arrayBar{
+    /* background-color: #ACD7EC; */
+    margin-inline: 2.5px;
+    width: 3px;
+    align-self: top;
+}
+
+/* Button Set Styling */
+.buttonContainer {
+    align-self: center;
+    padding-block: 2vh;
+}
+
+.button {
+    margin-inline: 2px;
+    font-size: large;
+    border-radius: 10px;
+    border: 2px sold #495D63;
+    color: #495D63
+}
+
+.dropdown_label {
+    color: white;
+    font-size: large;
+    padding-left: 2vh;
+    padding-right: 1vh;
+}
+
+.dropdown {
+    margin-right: 2vh;
+    font-size: large;
+}
