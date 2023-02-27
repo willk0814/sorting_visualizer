@@ -22,7 +22,7 @@ function Body() {
   const generateRandomArr = () => {
 
     let tmp_ArrContainer = []
-    for (let i = 0; i < 25; i ++){
+    for (let i = 0; i < 100; i ++){
       tmp_ArrContainer.push(new ArrayElement(i, generateRandomNum(), 'unsorted', i.toString()))
     }
     setArrContainer(tmp_ArrContainer)
@@ -93,7 +93,7 @@ function Body() {
         setCurrentAnimation(animation)
         setAnimationSequence(tmpQueue)
       }
-    }, 50);
+    }, 10);
     return () => clearInterval(interval)
   }, [animationSequence])
 
