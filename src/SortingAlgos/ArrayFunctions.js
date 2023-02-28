@@ -19,20 +19,23 @@ export class Animation {
 }
 
 
+// create an array of values from the arrContainer
 export function SortDriver({ sortingAlgo, arrContainer }){
-    // create an array of values from the arrContainer
     let arrValues = []
     for (let i = 0; i < arrContainer.length; i++){
         arrValues.push(arrContainer[i].value)
     }
+
     if (sortingAlgo === 'bubble'){
         return(BubbleSort(arrValues))
     }else if (sortingAlgo === 'heap'){
-        return(HeapSort(arrContainer))
-    }else if(sortingAlgo === ' merge'){
-        return(MergeSort(arrContainer))
+        return new HeapSort(arrValues).animation_queue
+    }else if(sortingAlgo === 'merge'){
+        alert('Unfortunately Merge Sort is still in developement')
+        // return(MergeSort(arrContainer))
     }else if(sortingAlgo === 'quick'){
-        return(QuickSort(arrContainer))
+        alert('Unfortunately Quick Sort is still in developement')
+        // return(QuickSort(arrContainer))
     }
 }
 
@@ -68,10 +71,78 @@ function BubbleSort( arr ){
     return animation_queue
 }
 
-function HeapSort( arr ){ 
-    let animation_queue = []
 
-    return animation_queue
+class HeapSort {
+    constructor(arr){
+        this.arr = arr
+        this.animation_queue = this.HeapSortSequence
+    }
+
+    get HeapSortSequence(){
+        let res = [new Animation('setUnsorted', 0, 0)]
+        // for some reason heapify doesnt have access to this.arr so we are using a tmp variable
+        let tmp_arr = this.arr
+        let len = this.arr.length
+
+        function Heapify (max_len, i){
+            let largest = i
+            let left = i * 2 + 1
+            let right = i * 2 + 2
+            
+            // make a comparison anytime left is inbounds
+            if (left < max_len){
+                res.push(new Animation('compare', left, largest))
+                res.push(new Animation('setUnsorted', left, largest))
+            }
+            if (left < max_len && tmp_arr[left] > tmp_arr[largest]){
+                largest = left
+            }
+
+            // make a comparison anytime right is inbounds
+            if (right < max_len){
+                res.push(new Animation('compare', right, largest))
+                res.push(new Animation('setUnsorted', right, largest))
+            }
+            if (right < max_len && tmp_arr[right] > tmp_arr[largest]){
+                largest = right
+            }
+            if (largest !== i) {
+                res.push(new Animation('compare', largest, i))
+                res.push(new Animation('compareSwap', largest, i))
+                res.push(new Animation('swap', largest, i))
+                res.push(new Animation('setUnsorted', largest, i))
+
+                let swapVal = tmp_arr[i]
+                tmp_arr[i] = tmp_arr[largest]
+                tmp_arr[largest] = swapVal
+
+                Heapify(max_len, largest)
+            }
+
+        }
+
+        for (let i = Math.floor(len / 2); i >= 0; i--){
+            Heapify(len, i)
+        }
+
+        for (let i = len - 1; i > 0; i--){
+            res.push(new Animation('compareSwap', 0, i))
+            res.push(new Animation('swap', 0, i))
+            res.push(new Animation('setSorted', i, i))
+
+            let swapVal = tmp_arr[0]
+            tmp_arr[0] = tmp_arr[i]
+            tmp_arr[i] = swapVal
+
+            Heapify(i, 0)
+
+
+        }
+        res.push(new Animation('setSorted', 0, 0))
+
+        return res
+    }
+
 }
 
 function QuickSort( arr ){ 
