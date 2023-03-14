@@ -34,7 +34,8 @@ export function SortDriver({ sortingAlgo, arrContainer }){
         alert('Unfortunately Merge Sort is still in developement')
         // return(MergeSort(arrContainer))
     }else if(sortingAlgo === 'quick'){
-        alert('Unfortunately Quick Sort is still in developement')
+        alert('Unfortunately Quick Sort is still in developement: some of the animations are a bit off')
+        return new QuickSort(arrValues).animation_queue
         // return(QuickSort(arrContainer))
     }
 }
@@ -145,11 +146,66 @@ class HeapSort {
 
 }
 
-function QuickSort( arr ){ 
-    let animation_queue = []
 
-    return animation_queue
+class QuickSort {
+    constructor(arr){
+        this.arr = arr
+        this.animation_queue = this.QuickSortSequence
+    }
+
+    get QuickSortSequence() {
+        let res = [new Animation('setUnsorted', 0, 0)]
+        let tmp_arr = this.arr
+
+
+        function Partition(array, low, high){
+            let pivot = array[high]
+            let i = low - 1
+            for (let j = low; j < high; j++){
+                res.push(new Animation('compare', j, high))
+                res.push(new Animation('setUnsorted', j, high))
+                if (array[j] <= pivot){
+                    i = i + 1
+                    
+                    // Swap animations
+                    res.push(new Animation('compareSwap', i, j))
+                    res.push(new Animation('swap', i, j))
+                    // res.push(new Animation('setUnsorted', i, j))
+                    
+
+                    // Swap Logic
+                    let swap = array[i]
+                    array[i] = array[j]
+                    array[j] = swap
+                }
+            }
+
+            // Swap animations
+            res.push(new Animation('compareSwap', i + 1, high))
+            res.push(new Animation('swap', i + 1, high))
+            res.push(new Animation('setUnsorted', i + 1, high))
+
+            // Swap Logic
+            let swap = array[i + 1]
+            array[i + 1] = array[high]
+            array[high] = swap
+            return i + 1
+        }
+
+        function QuickSortLogic(array, low, high){
+            if (low < high){
+                let pivot = Partition(array, low, high)
+                QuickSortLogic(array, low, pivot - 1)
+                QuickSortLogic(array, pivot + 1, high)
+            }
+        }
+
+        QuickSortLogic(tmp_arr, 0, tmp_arr.length - 1)
+        console.log('sorted arr: ', tmp_arr) 
+        return res
+    }
 }
+
 
 function MergeSort ( arr ){
     let animation_queue = []
