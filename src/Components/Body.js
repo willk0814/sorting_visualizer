@@ -12,10 +12,13 @@ function Body() {
   // State Vars - core logic
   const [sortingAlgo, setSortingAlgo] = useState("bubble");
 
-  // COMMENT THE USE OF EACH STATE VARIABLE
+  // State Var to hold an array of ArrayElement objs
   const [arrContainer, setArrContainer] = useState([]);
+  // State var to hold animation sequence generated in Sorting algos
   const [animationSequence, setAnimationSequence] = useState([]);
+  // State var to hold current animation
   const [currentAnimation, setCurrentAnimation] = useState(-1);
+  // State var to hold the length of arrContainer
   const [arrLength, setArrLength] = useState(100);
 
   // Array Generation Constants
@@ -25,7 +28,7 @@ function Body() {
   // Array Generation Functions
   const generateRandomArr = () => {
     let tmp_ArrContainer = [];
-    for (let i = 0; i < arrLength; i++) {
+    for (let i = 0; i < 50; i++) {
       tmp_ArrContainer.push(
         new ArrayElement(i, generateRandomNum(), "unsorted", i.toString())
       );
@@ -39,14 +42,12 @@ function Body() {
 
   // Setting the sorting Algo
   const handleSelectAlgo = (e) => {
-    // console.log(e.target.value)
     setSortingAlgo(e.target.value);
   };
 
   // this function will return an array of array containers which will be used to display each step of the animation sequence
   const handleSort = () => {
     let sequence = SortDriver({ sortingAlgo, arrContainer });
-    // console.log(sequence)
     setAnimationSequence(sequence);
   };
 
@@ -73,18 +74,12 @@ function Body() {
     setArrContainer(tmpContainer);
   };
 
-  // useEffect(() => {
-  //   console.log('UPDATED BARS')
-  //   for (let i = 0; i < arrContainer.length; i++){
-  //     console.log(arrContainer[i])
-  //   }
-  // }, [arrContainer])
-
   // Hook to generate an array on mount
   useEffect(() => {
     generateRandomArr();
   }, [arrLength]);
 
+  // Hook to assign the length state var based on the screen size
   useEffect(() => {
     const handleResize = () => {
       let width = window.innerWidth;
@@ -103,11 +98,14 @@ function Body() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // Hook that is triggered when the animation queue is reassigned, creates an interval to handle animations
   useEffect(() => {
     const interval = setInterval(() => {
       if (animationSequence.length >= 1) {
         let tmpQueue = animationSequence;
         let animation = tmpQueue.shift();
+        // Print out the current animation
+        console.log("Current animation: ", animation);
         handleAnimation(animation);
         setCurrentAnimation(animation);
         setAnimationSequence(tmpQueue);
