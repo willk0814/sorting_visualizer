@@ -87,7 +87,6 @@ function Body() {
 
   useEffect(() => {
     const handleResize = () => {
-      console.log("inner width, arrLength: ", window.innerWidth);
       let width = window.innerWidth;
       if (width <= 600) {
         setArrLength(20);
