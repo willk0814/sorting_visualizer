@@ -157,13 +157,14 @@ class QuickSort {
       let pivot = array[high];
       let i = low - 1;
       for (let j = low; j < high; j++) {
-        res.push(new Animation("compare", j, high));
-        res.push(new Animation("setUnsorted", j, high));
+        res.push(new Animation("compare", j, j));
+        res.push(new Animation("compare", high, high));
+        res.push(new Animation("setUnsorted", high, high));
         if (array[j] <= pivot) {
           i = i + 1;
 
           // Swap animations - only when unique indices
-          if (i != j) {
+          if (i !== j) {
             res.push(new Animation("compareSwap", i, j));
             res.push(new Animation("swap", i, j));
             res.push(new Animation("setUnsorted", i, j));
@@ -174,13 +175,16 @@ class QuickSort {
           array[i] = array[j];
           array[j] = swap;
         }
+        res.push(new Animation("setUnsorted", j, j));
       }
 
       // Swap animations - only when unique indices
-      if (i + 1 != high) {
+      if (i + 1 !== high) {
         res.push(new Animation("compareSwap", i + 1, high));
         res.push(new Animation("swap", i + 1, high));
         res.push(new Animation("setUnsorted", i + 1, high));
+      } else {
+        res.push(new Animation("setSorted", high, high));
       }
 
       // Swap Logic

@@ -110,7 +110,7 @@ function Body() {
         setCurrentAnimation(animation);
         setAnimationSequence(tmpQueue);
       }
-    }, 10);
+    }, 20);
     return () => clearInterval(interval);
   }, [animationSequence]);
 
