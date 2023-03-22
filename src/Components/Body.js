@@ -25,7 +25,7 @@ function Body() {
   const MAX = 3;
   const MIN = 500;
 
-  // Array Generation Functions
+  // Array Generation
   const generateRandomArr = () => {
     let tmp_ArrContainer = [];
     for (let i = 0; i < 50; i++) {
@@ -36,6 +36,7 @@ function Body() {
     setArrContainer(tmp_ArrContainer);
   };
 
+  // Random Number Helper
   const generateRandomNum = () => {
     return Math.floor(Math.random() * (MAX - MIN) + MIN);
   };
@@ -155,10 +156,3 @@ function Body() {
 }
 
 export default Body;
-
-// ToDo:
-// - Create a sorting algo state var
-// - Create a drop down menu with different sorting algorithms
-// - Create an animation object
-// - Write func to handle playback of a set of animations
-// - Write bubble sort algorithm to return a list of animations to Body.js
