@@ -28,12 +28,26 @@ function Body() {
   // Array Generation
   const generateRandomArr = () => {
     let tmp_ArrContainer = [];
+    let num_map = {};
     for (let i = 0; i < 50; i++) {
+      let value = generateUniqueNum(num_map);
       tmp_ArrContainer.push(
-        new ArrayElement(i, generateRandomNum(), "unsorted", i.toString())
+        new ArrayElement(i, value, "unsorted", i.toString())
       );
+      num_map[value] = value;
     }
     setArrContainer(tmp_ArrContainer);
+  };
+
+  // Generate Unique Ranom Number
+  const generateUniqueNum = (num_map) => {
+    let uniqueVal = false;
+    while (!uniqueVal) {
+      let tmp_val = generateRandomNum();
+      if (!(tmp_val in num_map)) {
+        return tmp_val;
+      }
+    }
   };
 
   // Random Number Helper

@@ -20,9 +20,16 @@ export class Animation {
 
 // create an array of values from the arrContainer
 export function SortDriver({ sortingAlgo, arrContainer }) {
+  // construct arr values arr
   let arrValues = [];
   for (let i = 0; i < arrContainer.length; i++) {
     arrValues.push(arrContainer[i].value);
+  }
+
+  // construct index map for MergeSort
+  let ind_map = {};
+  for (let j = 0; j < arrValues.length; j++) {
+    ind_map[arrValues[j]] = j;
   }
 
   if (sortingAlgo === "bubble") {
@@ -30,7 +37,7 @@ export function SortDriver({ sortingAlgo, arrContainer }) {
   } else if (sortingAlgo === "heap") {
     return new HeapSort(arrValues).animation_queue;
   } else if (sortingAlgo === "merge") {
-    console.log(new MergeSortObj(arrValues).animation_queue);
+    console.log(new MergeSortObj(arrValues, ind_map).animation_queue);
     return [new Animation("setSorted", 10, 15)];
   } else if (sortingAlgo === "quick") {
     return new QuickSort(arrValues).animation_queue;
@@ -206,8 +213,9 @@ class QuickSort {
 }
 
 class MergeSortObj {
-  constructor(arr) {
+  constructor(arr, ind_map) {
     this.arr = arr;
+    this.ind_map = ind_map;
     this.animation_queue = this.MergeSortSequence;
   }
   get MergeSortSequence() {
