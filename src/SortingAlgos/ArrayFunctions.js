@@ -208,8 +208,27 @@ class QuickSort {
   }
 }
 
-function MergeSort(arr) {
-  let animation_queue = [];
+// class MergeSort {
+//   construct(arr) {
+//     this.arr = arr;
+//     this.animation_queue = this.MergeSortSequence;
+//   }
+//   get MergeSortSequence() {
+//     let res = [new Animation("setUnsorted", 0, 0)];
+//     // tmp_arr = this.arr;
 
-  return animation_queue;
-}
+//     function Merge(arr, l, m, r) {}
+
+//     function MergeSort(arr, l, r) {
+//       if (l >= r) {
+//         return;
+//       }
+//       let m = 1 + parseInt((r - 1) / 2);
+//       MergeSort(arr, l, m);
+//       MergeSort(arr, m + 1, r);
+//       Merge(arr, l, m, r);
+//     }
+
+//     return res;
+//   }
+// }
