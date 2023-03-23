@@ -149,7 +149,7 @@ function Body() {
         >
           <option value="bubble">Bubble Sort</option>
           <option value="heap">Heap Sort</option>
-          <option value="merge">Merge Sort</option>
+          {/* <option value="merge">Merge Sort</option> */}
           <option value="quick">Quick Sort</option>
         </select>
 

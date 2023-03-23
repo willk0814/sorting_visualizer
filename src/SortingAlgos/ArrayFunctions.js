@@ -37,8 +37,8 @@ export function SortDriver({ sortingAlgo, arrContainer }) {
   } else if (sortingAlgo === "heap") {
     return new HeapSort(arrValues).animation_queue;
   } else if (sortingAlgo === "merge") {
-    console.log(new MergeSortObj(arrValues, ind_map).animation_queue);
-    return [new Animation("setSorted", 10, 15)];
+    // console.log(new MergeSortObj(arrValues, ind_map).animation_queue);
+    return new MergeSortObj(arrValues, ind_map).animation_queue;
   } else if (sortingAlgo === "quick") {
     return new QuickSort(arrValues).animation_queue;
     // return(QuickSort(arrContainer))
@@ -218,8 +218,13 @@ class MergeSortObj {
     this.ind_map = ind_map;
     this.animation_queue = this.MergeSortSequence;
   }
+
   get MergeSortSequence() {
     let res = [new Animation("setUnsorted", 0, 0)];
+
+    // map of every value and its index - reference by value
+    let index_map = this.ind_map;
+
     function Merge(arr, left, mid, right) {
       // create two temporary arrays
       let left_arr = new Array(mid - left + 1);
@@ -243,15 +248,45 @@ class MergeSortObj {
       - create a dictionary of numbers and their indices in the form:
         - { number : index, number2 : index2, ...  }
       - when combining arrays reference index in dictionary 
-        for comparison index
+        for comparison index -> since we are coming to an auxillary
+        array I can reference that value's location in the map
+      - need to consider moving indexes around in this data structure
       */
 
       // select the smaller of the values from the left, right arrs
       while (left_ind < left_arr.length && right_ind < right_arr.length) {
+        // compare left_arr[left_ind] and right_arr[right_ind]
+        let left_val_ind = index_map[left_arr[left_ind]];
+        let right_val_ind = index_map[right_arr[right_ind]];
+        let swap_val_ind = index_map[arr[final_ind]];
+
+        res.push(new Animation("compare", left_val_ind, right_val_ind));
+
         if (left_arr[left_ind] <= right_arr[right_ind]) {
+          // Swap animation
+          res.push(new Animation("setUnsorted", right_val_ind, right_val_ind));
+          res.push(new Animation("compareSwap", left_val_ind, swap_val_ind));
+          res.push(new Animation("swap", left_val_ind, swap_val_ind));
+          res.push(new Animation("setUnsorted", left_val_ind, swap_val_ind));
+
+          // left value = final_ind
+          let tmp = index_map[arr[final_ind]];
+          index_map[arr[final_ind]] = index_map[left_arr[left_ind]];
+          index_map[left_arr[left_ind]] = tmp;
+
+          // Code - I'm not sure how equivalent the swap and the logic are
           arr[final_ind] = left_arr[left_ind];
           left_ind++;
         } else {
+          res.push(new Animation("setUnsorted", left_val_ind, left_val_ind));
+          res.push(new Animation("compareSwap", right_val_ind, swap_val_ind));
+          res.push(new Animation("swap", right_val_ind, swap_val_ind));
+          res.push(new Animation("setUnsorted", right_val_ind, swap_val_ind));
+
+          let tmp = index_map[arr[final_ind]];
+          index_map[arr[final_ind]] = index_map[right_arr[right_ind]];
+          index_map[right_arr[right_ind]] = tmp;
+
           arr[final_ind] = right_arr[right_ind];
           right_ind++;
         }
@@ -260,6 +295,16 @@ class MergeSortObj {
 
       // add any remaining values from the left arr
       while (left_ind < left_arr.length) {
+        let left_val_ind = index_map[left_arr[left_ind]];
+        let swap_val_ind = index_map[arr[final_ind]];
+        res.push(new Animation("compareSwap", left_val_ind, swap_val_ind));
+        res.push(new Animation("swap", left_val_ind, swap_val_ind));
+        res.push(new Animation("setUnsorted", left_val_ind, swap_val_ind));
+
+        let tmp = index_map[arr[final_ind]];
+        index_map[arr[final_ind]] = index_map[left_arr[left_ind]];
+        index_map[left_arr[left_ind]] = tmp;
+
         arr[final_ind] = left_arr[left_ind];
         left_ind++;
         final_ind++;
@@ -267,6 +312,16 @@ class MergeSortObj {
 
       // add any remaining values from the right arr
       while (right_ind < right_arr.length) {
+        let right_val_ind = index_map[right_arr[right_ind]];
+        let swap_val_ind = index_map[arr[final_ind]];
+        res.push(new Animation("compareSwap", right_val_ind, swap_val_ind));
+        res.push(new Animation("swap", right_val_ind, swap_val_ind));
+        res.push(new Animation("setUnsorted", right_val_ind, swap_val_ind));
+
+        let tmp = index_map[arr[final_ind]];
+        index_map[arr[final_ind]] = index_map[right_arr[right_ind]];
+        index_map[right_arr[right_ind]] = tmp;
+
         arr[final_ind] = right_arr[right_ind];
         right_ind++;
         final_ind++;
@@ -285,8 +340,8 @@ class MergeSortObj {
 
     let arr = this.arr;
     // this.arr = MergeSort(tmp_arr, 0, this.arr.length - 1);
-    console.log(MergeSort(arr, 0, arr.length - 1));
-    console.log(arr);
+    // console.log("MergeSort Return: ", MergeSort(arr, 0, arr.length - 1));
+    MergeSort(arr, 0, arr.length - 1);
     return res;
   }
 }
