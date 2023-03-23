@@ -230,6 +230,15 @@ class MergeSortObj {
       let right_ind = 0; //initial index of right_arr
       let final_ind = left; //initial index of arr
 
+      /* Possible Implementation of Animations:
+      - modify the array generation entirely unique numbers
+      - create a dictionary of numbers and their indices in the form:
+        - { number : index, number2 : index2, ...  }
+      - when combining arrays reference index in dictionary 
+        for comparison index
+      */
+
+      // select the smaller of the values from the left, right arrs
       while (left_ind < left_arr.length && right_ind < right_arr.length) {
         if (left_arr[left_ind] <= right_arr[right_ind]) {
           arr[final_ind] = left_arr[left_ind];
@@ -241,12 +250,14 @@ class MergeSortObj {
         final_ind++;
       }
 
+      // add any remaining values from the left arr
       while (left_ind < left_arr.length) {
         arr[final_ind] = left_arr[left_ind];
         left_ind++;
         final_ind++;
       }
 
+      // add any remaining values from the right arr
       while (right_ind < right_arr.length) {
         arr[final_ind] = right_arr[right_ind];
         right_ind++;
