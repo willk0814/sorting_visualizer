@@ -30,12 +30,9 @@ export function SortDriver({ sortingAlgo, arrContainer }) {
   } else if (sortingAlgo === "heap") {
     return new HeapSort(arrValues).animation_queue;
   } else if (sortingAlgo === "merge") {
-    alert("Unfortunately Merge Sort is still in developement");
-    // return(MergeSort(arrContainer))
+    console.log(new MergeSortObj(arrValues).animation_queue);
+    return [new Animation("setSorted", 10, 15)];
   } else if (sortingAlgo === "quick") {
-    alert(
-      "Unfortunately Quick Sort is still in developement: some of the animations are a bit off"
-    );
     return new QuickSort(arrValues).animation_queue;
     // return(QuickSort(arrContainer))
   }
@@ -208,27 +205,69 @@ class QuickSort {
   }
 }
 
-// class MergeSort {
-//   construct(arr) {
-//     this.arr = arr;
-//     this.animation_queue = this.MergeSortSequence;
-//   }
-//   get MergeSortSequence() {
-//     let res = [new Animation("setUnsorted", 0, 0)];
-//     // tmp_arr = this.arr;
+class MergeSortObj {
+  constructor(arr) {
+    this.arr = arr;
+    this.animation_queue = this.MergeSortSequence;
+  }
+  get MergeSortSequence() {
+    let res = [new Animation("setUnsorted", 0, 0)];
+    function Merge(arr, left, mid, right) {
+      // create two temporary arrays
+      let left_arr = new Array(mid - left + 1);
+      let right_arr = new Array(right - mid);
 
-//     function Merge(arr, l, m, r) {}
+      // fill both temporary arrays
+      for (let i = 0; i < left_arr.length; i++) {
+        left_arr[i] = arr[left + i];
+      }
+      for (let j = 0; j < right_arr.length; j++) {
+        right_arr[j] = arr[mid + 1 + j];
+      }
 
-//     function MergeSort(arr, l, r) {
-//       if (l >= r) {
-//         return;
-//       }
-//       let m = 1 + parseInt((r - 1) / 2);
-//       MergeSort(arr, l, m);
-//       MergeSort(arr, m + 1, r);
-//       Merge(arr, l, m, r);
-//     }
+      // merge left and right arrays back into arr
+      let left_ind = 0; //initial index of left_arr
+      let right_ind = 0; //initial index of right_arr
+      let final_ind = left; //initial index of arr
 
-//     return res;
-//   }
-// }
+      while (left_ind < left_arr.length && right_ind < right_arr.length) {
+        if (left_arr[left_ind] <= right_arr[right_ind]) {
+          arr[final_ind] = left_arr[left_ind];
+          left_ind++;
+        } else {
+          arr[final_ind] = right_arr[right_ind];
+          right_ind++;
+        }
+        final_ind++;
+      }
+
+      while (left_ind < left_arr.length) {
+        arr[final_ind] = left_arr[left_ind];
+        left_ind++;
+        final_ind++;
+      }
+
+      while (right_ind < right_arr.length) {
+        arr[final_ind] = right_arr[right_ind];
+        right_ind++;
+        final_ind++;
+      }
+    }
+
+    function MergeSort(arr, left, right) {
+      if (left >= right) {
+        return;
+      }
+      let mid = left + Math.floor((right - left) / 2);
+      MergeSort(arr, left, mid);
+      MergeSort(arr, mid + 1, right);
+      Merge(arr, left, mid, right);
+    }
+
+    let arr = this.arr;
+    // this.arr = MergeSort(tmp_arr, 0, this.arr.length - 1);
+    console.log(MergeSort(arr, 0, arr.length - 1));
+    console.log(arr);
+    return res;
+  }
+}
